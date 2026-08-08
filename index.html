@@ -25,11 +25,11 @@
         .container {
             width: 92%;
             max-width: 520px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255,255,255,0.96);
             border-radius: 30px;
             padding: 40px 25px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             position: relative;
             z-index: 10;
         }
@@ -41,13 +41,8 @@
         }
 
         @keyframes heartbeat {
-            0%, 100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.15);
-            }
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
         h1 {
@@ -80,7 +75,7 @@
         .yes-btn {
             background: #ff3e6c;
             color: white;
-            box-shadow: 0 8px 20px rgba(255, 62, 108, 0.35);
+            box-shadow: 0 8px 20px rgba(255,62,108,0.35);
         }
 
         .yes-btn:hover {
@@ -100,13 +95,15 @@
 
         /* Calendar */
 
-        .calendar-title {
+        .calendar-title,
+        .type-title {
             font-size: 27px;
             color: #ff3e6c;
             margin-bottom: 8px;
         }
 
-        .calendar-subtitle {
+        .calendar-subtitle,
+        .type-subtitle {
             color: #777;
             margin-bottom: 25px;
         }
@@ -115,7 +112,6 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 7px;
-            margin-top: 15px;
         }
 
         .day-name {
@@ -146,18 +142,7 @@
             cursor: default;
         }
 
-        /* Date Type */
-
-        .type-title {
-            font-size: 27px;
-            color: #ff3e6c;
-            margin-bottom: 8px;
-        }
-
-        .type-subtitle {
-            color: #777;
-            margin-bottom: 25px;
-        }
+        /* Date Types */
 
         .date-types {
             display: grid;
@@ -173,7 +158,6 @@
             font-size: 15px;
             border: 2px solid transparent;
             cursor: pointer;
-            transition: 0.3s;
         }
 
         .type-btn:hover {
@@ -215,6 +199,12 @@
             color: #777;
             font-size: 17px;
             line-height: 1.6;
+        }
+
+        .saving {
+            color: #ff3e6c;
+            font-size: 14px;
+            margin-top: 15px;
         }
 
         /* Floating Hearts */
@@ -262,15 +252,6 @@
             .final-message {
                 font-size: 27px;
             }
-
-            .date-types {
-                gap: 10px;
-            }
-
-            .type-btn {
-                padding: 15px 7px;
-                font-size: 14px;
-            }
         }
     </style>
 </head>
@@ -279,7 +260,8 @@
 
 <div class="container">
 
-    <!-- PAGE 1 -->
+    <!-- QUESTION PAGE -->
+
     <div id="questionPage">
 
         <div class="heart">❤️</div>
@@ -307,7 +289,8 @@
     </div>
 
 
-    <!-- PAGE 2 : CALENDAR -->
+    <!-- CALENDAR PAGE -->
+
     <div id="calendarPage" class="hidden">
 
         <div class="heart">🥰</div>
@@ -335,7 +318,8 @@
     </div>
 
 
-    <!-- PAGE 3 : DATE TYPE -->
+    <!-- DATE TYPE PAGE -->
+
     <div id="typePage" class="hidden">
 
         <div class="heart">💕</div>
@@ -350,27 +334,32 @@
 
         <div class="date-types">
 
-            <button class="type-btn" onclick="selectType('🍽️ Dinner Date')">
+            <button class="type-btn"
+                onclick="selectType('🍽️ Dinner Date')">
                 <span class="type-icon">🍽️</span>
                 Dinner Date
             </button>
 
-            <button class="type-btn" onclick="selectType('☕ Coffee Date')">
+            <button class="type-btn"
+                onclick="selectType('☕ Coffee Date')">
                 <span class="type-icon">☕</span>
                 Coffee Date
             </button>
 
-            <button class="type-btn" onclick="selectType('🎬 Movie Date')">
+            <button class="type-btn"
+                onclick="selectType('🎬 Movie Date')">
                 <span class="type-icon">🎬</span>
                 Movie Date
             </button>
 
-            <button class="type-btn" onclick="selectType('🌹 Romantic Date')">
+            <button class="type-btn"
+                onclick="selectType('🌹 Romantic Date')">
                 <span class="type-icon">🌹</span>
                 Romantic Date
             </button>
 
-            <button class="type-btn" onclick="selectType('🌳 Outdoor Date')">
+            <button class="type-btn"
+                onclick="selectType('🌳 Outdoor Date')">
                 <span class="type-icon">🌳</span>
                 Outdoor Date
             </button>
@@ -380,7 +369,8 @@
     </div>
 
 
-    <!-- PAGE 4 : FINAL -->
+    <!-- FINAL PAGE -->
+
     <div id="finalPage" class="hidden">
 
         <div class="final-heart">
@@ -409,17 +399,73 @@
 
         </p>
 
+        <p id="savingMessage" class="saving"></p>
+
     </div>
 
 </div>
 
 
-<script>
+<!-- FIREBASE -->
+
+<script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+        getFirestore,
+        collection,
+        addDoc,
+        serverTimestamp
+    }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    // Firebase configuration
+
+    const firebaseConfig = {
+
+        apiKey: "AIzaSyBuOs7Rswcmtb_la7VF8WLXDluw7jUMUMo",
+
+        authDomain: "our-date-24.firebaseapp.com",
+
+        projectId: "our-date-24",
+
+        storageBucket: "our-date-24.firebasestorage.app",
+
+        messagingSenderId: "384864769718",
+
+        appId: "1:384864769718:web:f72035687b53833dc33817",
+
+        measurementId: "G-R8L89B7Z9E"
+
+    };
+
+
+    // Initialize Firebase
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+
+    // Selected date
 
     let chosenDate = "";
 
 
-    // Show Calendar
+    // Make functions available to HTML
+
+    window.showCalendar = showCalendar;
+
+    window.selectDate = selectDate;
+
+    window.selectType = selectType;
+
+
+    // Show calendar
+
     function showCalendar() {
 
         document.getElementById("questionPage")
@@ -434,10 +480,12 @@
     }
 
 
-    // Create Calendar
+    // Create calendar
+
     function createCalendar() {
 
-        const calendar = document.getElementById("calendar");
+        const calendar =
+            document.getElementById("calendar");
 
         const today = new Date();
 
@@ -452,8 +500,8 @@
             new Date(year, month + 1, 0).getDate();
 
 
-        // Keep day names
         calendar.innerHTML = `
+
             <div class="day-name">Sun</div>
             <div class="day-name">Mon</div>
             <div class="day-name">Tue</div>
@@ -461,22 +509,33 @@
             <div class="day-name">Thu</div>
             <div class="day-name">Fri</div>
             <div class="day-name">Sat</div>
+
         `;
 
 
         // Empty spaces
+
         for (let i = 0; i < firstDay; i++) {
 
-            const empty = document.createElement("div");
+            const empty =
+                document.createElement("div");
 
-            empty.classList.add("date", "empty");
+            empty.classList.add(
+                "date",
+                "empty"
+            );
 
             calendar.appendChild(empty);
         }
 
 
         // Dates
-        for (let day = 1; day <= daysInMonth; day++) {
+
+        for (
+            let day = 1;
+            day <= daysInMonth;
+            day++
+        ) {
 
             const dateButton =
                 document.createElement("button");
@@ -487,29 +546,45 @@
 
             dateButton.onclick = function () {
 
-                selectDate(year, month, day);
+                selectDate(
+                    year,
+                    month,
+                    day
+                );
 
             };
 
             calendar.appendChild(dateButton);
         }
+
     }
 
 
-    // Select Date
+    // Date selected
+
     function selectDate(year, month, day) {
 
-        const date = new Date(year, month, day);
+        const date =
+            new Date(year, month, day);
 
         const options = {
+
             weekday: "long",
+
             year: "numeric",
+
             month: "long",
+
             day: "numeric"
+
         };
 
+
         chosenDate =
-            date.toLocaleDateString("en-US", options);
+            date.toLocaleDateString(
+                "en-US",
+                options
+            );
 
 
         document.getElementById("calendarPage")
@@ -518,12 +593,15 @@
         document.getElementById("typePage")
             .classList.remove("hidden");
 
+
         createHearts();
+
     }
 
 
-    // Select Date Type
-    function selectType(type) {
+    // Date type selected
+
+    async function selectType(type) {
 
         document.getElementById("typePage")
             .classList.add("hidden");
@@ -532,33 +610,95 @@
             .classList.remove("hidden");
 
 
-        document.getElementById("selectedDate").innerHTML =
+        document.getElementById("selectedDate")
+            .innerHTML =
             "📅 <strong>Our Date:</strong><br>" +
             chosenDate;
 
 
-        document.getElementById("selectedType").innerHTML =
+        document.getElementById("selectedType")
+            .innerHTML =
             "💝 <strong>Date Type:</strong><br>" +
             type;
 
 
+        document.getElementById("savingMessage")
+            .innerText =
+            "Saving your answer... ❤️";
+
+
         createHearts();
+
         createHearts();
+
         createHearts();
+
+
+        // Save answer to Firestore
+
+        try {
+
+            await addDoc(
+                collection(db, "dateResponses"),
+                {
+
+                    response: "YES ❤️",
+
+                    date: chosenDate,
+
+                    dateType: type,
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            document.getElementById(
+                "savingMessage"
+            ).innerText =
+                "Your answer has been saved ❤️";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Firebase Error:",
+                error
+            );
+
+
+            document.getElementById(
+                "savingMessage"
+            ).innerText =
+                "It's a date! ❤️";
+
+        }
+
     }
 
 
-    // Floating Hearts
+    // Floating hearts
+
     function createHearts() {
 
-        for (let i = 0; i < 15; i++) {
+        for (
+            let i = 0;
+            i < 15;
+            i++
+        ) {
 
             setTimeout(() => {
 
                 const heart =
                     document.createElement("div");
 
-                heart.classList.add("floating-heart");
+                heart.classList.add(
+                    "floating-heart"
+                );
+
 
                 const hearts = [
                     "❤️",
@@ -568,23 +708,30 @@
                     "💘"
                 ];
 
+
                 heart.innerHTML =
                     hearts[
                         Math.floor(
-                            Math.random() * hearts.length
+                            Math.random() *
+                            hearts.length
                         )
                     ];
 
 
                 heart.style.left =
-                    Math.random() * 100 + "vw";
+                    Math.random() * 100 +
+                    "vw";
 
 
                 heart.style.animationDuration =
-                    (3 + Math.random() * 3) + "s";
+                    (3 +
+                    Math.random() * 3) +
+                    "s";
 
 
-                document.body.appendChild(heart);
+                document.body.appendChild(
+                    heart
+                );
 
 
                 setTimeout(() => {
@@ -594,7 +741,9 @@
                 }, 6000);
 
             }, i * 150);
+
         }
+
     }
 
 </script>
