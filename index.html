@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +25,7 @@
         .container {
             width: 92%;
             max-width: 520px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             border-radius: 30px;
             padding: 40px 25px;
             text-align: center;
@@ -147,7 +146,49 @@
             cursor: default;
         }
 
-        /* Final screen */
+        /* Date Type */
+
+        .type-title {
+            font-size: 27px;
+            color: #ff3e6c;
+            margin-bottom: 8px;
+        }
+
+        .type-subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .date-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .type-btn {
+            background: #fff0f4;
+            color: #444;
+            padding: 18px 10px;
+            border-radius: 18px;
+            font-size: 15px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .type-btn:hover {
+            background: #ffe0e9;
+            border-color: #ff3e6c;
+            transform: translateY(-4px);
+        }
+
+        .type-icon {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        /* Final */
 
         .final-heart {
             font-size: 85px;
@@ -160,10 +201,13 @@
             margin: 15px 0;
         }
 
-        .selected-date {
-            font-size: 19px;
+        .selected-info {
+            background: #fff0f4;
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 20px;
             color: #555;
-            margin-top: 15px;
+            line-height: 1.8;
         }
 
         .love-text {
@@ -173,7 +217,7 @@
             line-height: 1.6;
         }
 
-        /* Floating hearts */
+        /* Floating Hearts */
 
         .floating-heart {
             position: fixed;
@@ -197,6 +241,7 @@
         }
 
         @media (max-width: 450px) {
+
             .container {
                 padding: 30px 18px;
             }
@@ -217,233 +262,342 @@
             .final-message {
                 font-size: 27px;
             }
+
+            .date-types {
+                gap: 10px;
+            }
+
+            .type-btn {
+                padding: 15px 7px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- PAGE 1 -->
-        <div id="questionPage">
+    <!-- PAGE 1 -->
+    <div id="questionPage">
 
-            <div class="heart">❤️</div>
+        <div class="heart">❤️</div>
 
-            <h1>Will you go on a date with me?</h1>
+        <h1>
+            Will you go on a date with me?
+        </h1>
 
-            <p class="subtitle">
-                I have a very important question for you... 🥺
-            </p>
+        <p class="subtitle">
+            I have a very important question for you... 🥺
+        </p>
 
-            <div class="buttons">
-                <button class="yes-btn" onclick="showCalendar()">
-                    YES ❤️
-                </button>
+        <div class="buttons">
 
-                <button class="no-btn">
-                    NO 😌
-                </button>
-            </div>
+            <button class="yes-btn" onclick="showCalendar()">
+                YES ❤️
+            </button>
 
-        </div>
-
-
-        <!-- PAGE 2 -->
-        <div id="calendarPage" class="hidden">
-
-            <div class="heart">🥰</div>
-
-            <h2 class="calendar-title">
-                Yay! ❤️
-            </h2>
-
-            <p class="calendar-subtitle">
-                Now choose our date 📅
-            </p>
-
-            <div class="calendar" id="calendar">
-
-                <div class="day-name">Sun</div>
-                <div class="day-name">Mon</div>
-                <div class="day-name">Tue</div>
-                <div class="day-name">Wed</div>
-                <div class="day-name">Thu</div>
-                <div class="day-name">Fri</div>
-                <div class="day-name">Sat</div>
-
-            </div>
-
-        </div>
-
-
-        <!-- PAGE 3 -->
-        <div id="finalPage" class="hidden">
-
-            <div class="final-heart">
-                ❤️
-            </div>
-
-            <h2 class="final-message">
-                Thank you for loving me!
-            </h2>
-
-            <p class="selected-date" id="selectedDate"></p>
-
-            <p class="love-text">
-                I can't wait to spend that beautiful day with you. 🥹❤️
-                <br><br>
-                It's a date! 🌹✨
-            </p>
+            <button class="no-btn">
+                NO 😌
+            </button>
 
         </div>
 
     </div>
 
 
-    <script>
+    <!-- PAGE 2 : CALENDAR -->
+    <div id="calendarPage" class="hidden">
 
-        // Show calendar
-        function showCalendar() {
+        <div class="heart">🥰</div>
 
-            document.getElementById("questionPage").classList.add("hidden");
+        <h2 class="calendar-title">
+            Yay! ❤️
+        </h2>
 
-            document.getElementById("calendarPage").classList.remove("hidden");
+        <p class="calendar-subtitle">
+            Now choose our date 📅
+        </p>
 
-            createCalendar();
+        <div class="calendar" id="calendar">
 
-            createHearts();
+            <div class="day-name">Sun</div>
+            <div class="day-name">Mon</div>
+            <div class="day-name">Tue</div>
+            <div class="day-name">Wed</div>
+            <div class="day-name">Thu</div>
+            <div class="day-name">Fri</div>
+            <div class="day-name">Sat</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGE 3 : DATE TYPE -->
+    <div id="typePage" class="hidden">
+
+        <div class="heart">💕</div>
+
+        <h2 class="type-title">
+            What kind of date? ❤️
+        </h2>
+
+        <p class="type-subtitle">
+            Choose how you want to spend our day 🥰
+        </p>
+
+        <div class="date-types">
+
+            <button class="type-btn" onclick="selectType('🍽️ Dinner Date')">
+                <span class="type-icon">🍽️</span>
+                Dinner Date
+            </button>
+
+            <button class="type-btn" onclick="selectType('☕ Coffee Date')">
+                <span class="type-icon">☕</span>
+                Coffee Date
+            </button>
+
+            <button class="type-btn" onclick="selectType('🎬 Movie Date')">
+                <span class="type-icon">🎬</span>
+                Movie Date
+            </button>
+
+            <button class="type-btn" onclick="selectType('🌹 Romantic Date')">
+                <span class="type-icon">🌹</span>
+                Romantic Date
+            </button>
+
+            <button class="type-btn" onclick="selectType('🌳 Outdoor Date')">
+                <span class="type-icon">🌳</span>
+                Outdoor Date
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGE 4 : FINAL -->
+    <div id="finalPage" class="hidden">
+
+        <div class="final-heart">
+            ❤️
+        </div>
+
+        <h2 class="final-message">
+            Thank you for loving me!
+        </h2>
+
+        <div class="selected-info">
+
+            <div id="selectedDate"></div>
+
+            <div id="selectedType"></div>
+
+        </div>
+
+        <p class="love-text">
+
+            I can't wait to spend this beautiful day with you. 🥹❤️
+
+            <br><br>
+
+            It's a date! 🌹✨
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let chosenDate = "";
+
+
+    // Show Calendar
+    function showCalendar() {
+
+        document.getElementById("questionPage")
+            .classList.add("hidden");
+
+        document.getElementById("calendarPage")
+            .classList.remove("hidden");
+
+        createCalendar();
+
+        createHearts();
+    }
+
+
+    // Create Calendar
+    function createCalendar() {
+
+        const calendar = document.getElementById("calendar");
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+
+        const month = today.getMonth();
+
+        const firstDay =
+            new Date(year, month, 1).getDay();
+
+        const daysInMonth =
+            new Date(year, month + 1, 0).getDate();
+
+
+        // Keep day names
+        calendar.innerHTML = `
+            <div class="day-name">Sun</div>
+            <div class="day-name">Mon</div>
+            <div class="day-name">Tue</div>
+            <div class="day-name">Wed</div>
+            <div class="day-name">Thu</div>
+            <div class="day-name">Fri</div>
+            <div class="day-name">Sat</div>
+        `;
+
+
+        // Empty spaces
+        for (let i = 0; i < firstDay; i++) {
+
+            const empty = document.createElement("div");
+
+            empty.classList.add("date", "empty");
+
+            calendar.appendChild(empty);
         }
 
 
-        // Create current month's calendar
-        function createCalendar() {
+        // Dates
+        for (let day = 1; day <= daysInMonth; day++) {
 
-            const calendar = document.getElementById("calendar");
+            const dateButton =
+                document.createElement("button");
 
-            // Keep day names
-            const dayNames = calendar.innerHTML;
+            dateButton.classList.add("date");
 
-            calendar.innerHTML = dayNames;
+            dateButton.innerText = day;
 
-            const today = new Date();
+            dateButton.onclick = function () {
 
-            const year = today.getFullYear();
+                selectDate(year, month, day);
 
-            const month = today.getMonth();
-
-            const firstDay = new Date(year, month, 1).getDay();
-
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-
-            // Empty spaces before first day
-            for (let i = 0; i < firstDay; i++) {
-
-                const empty = document.createElement("div");
-
-                empty.classList.add("date", "empty");
-
-                calendar.appendChild(empty);
-            }
-
-
-            // Dates
-            for (let day = 1; day <= daysInMonth; day++) {
-
-                const dateButton = document.createElement("button");
-
-                dateButton.classList.add("date");
-
-                dateButton.innerText = day;
-
-                dateButton.onclick = function () {
-
-                    selectDate(year, month, day);
-
-                };
-
-                calendar.appendChild(dateButton);
-            }
-        }
-
-
-        // Date selection
-        function selectDate(year, month, day) {
-
-            const date = new Date(year, month, day);
-
-            const options = {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
             };
 
-            const formattedDate = date.toLocaleDateString(
-                "en-US",
-                options
-            );
-
-
-            document.getElementById("calendarPage")
-                .classList.add("hidden");
-
-            document.getElementById("finalPage")
-                .classList.remove("hidden");
-
-
-            document.getElementById("selectedDate").innerHTML =
-                "Our date is set for <strong>" +
-                formattedDate +
-                "</strong> 🥰";
-
-
-            createHearts();
-
-            createHearts();
-
-            createHearts();
+            calendar.appendChild(dateButton);
         }
+    }
 
 
-        // Floating hearts
-        function createHearts() {
+    // Select Date
+    function selectDate(year, month, day) {
 
-            for (let i = 0; i < 15; i++) {
+        const date = new Date(year, month, day);
+
+        const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        };
+
+        chosenDate =
+            date.toLocaleDateString("en-US", options);
+
+
+        document.getElementById("calendarPage")
+            .classList.add("hidden");
+
+        document.getElementById("typePage")
+            .classList.remove("hidden");
+
+        createHearts();
+    }
+
+
+    // Select Date Type
+    function selectType(type) {
+
+        document.getElementById("typePage")
+            .classList.add("hidden");
+
+        document.getElementById("finalPage")
+            .classList.remove("hidden");
+
+
+        document.getElementById("selectedDate").innerHTML =
+            "📅 <strong>Our Date:</strong><br>" +
+            chosenDate;
+
+
+        document.getElementById("selectedType").innerHTML =
+            "💝 <strong>Date Type:</strong><br>" +
+            type;
+
+
+        createHearts();
+        createHearts();
+        createHearts();
+    }
+
+
+    // Floating Hearts
+    function createHearts() {
+
+        for (let i = 0; i < 15; i++) {
+
+            setTimeout(() => {
+
+                const heart =
+                    document.createElement("div");
+
+                heart.classList.add("floating-heart");
+
+                const hearts = [
+                    "❤️",
+                    "💗",
+                    "💕",
+                    "💖",
+                    "💘"
+                ];
+
+                heart.innerHTML =
+                    hearts[
+                        Math.floor(
+                            Math.random() * hearts.length
+                        )
+                    ];
+
+
+                heart.style.left =
+                    Math.random() * 100 + "vw";
+
+
+                heart.style.animationDuration =
+                    (3 + Math.random() * 3) + "s";
+
+
+                document.body.appendChild(heart);
+
 
                 setTimeout(() => {
 
-                    const heart = document.createElement("div");
+                    heart.remove();
 
-                    heart.classList.add("floating-heart");
+                }, 6000);
 
-                    heart.innerHTML =
-                        ["❤️", "💗", "💕", "💖", "💘"][
-                            Math.floor(Math.random() * 5)
-                        ];
-
-                    heart.style.left =
-                        Math.random() * 100 + "vw";
-
-                    heart.style.animationDuration =
-                        (3 + Math.random() * 3) + "s";
-
-                    document.body.appendChild(heart);
-
-
-                    setTimeout(() => {
-
-                        heart.remove();
-
-                    }, 6000);
-
-                }, i * 150);
-            }
+            }, i * 150);
         }
+    }
 
-    </script>
+</script>
 
 </body>
 </html>
-```
